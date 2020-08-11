@@ -14,16 +14,41 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends Base<Home> {
+class _HomeState extends Base < Home > {
   //Odoo _odoo;
-  List<Partner> _partners = [];
+  List < Partner > _partners = [];
+
+  _getMenus() async {
+    isConnected().then(
+      (isInternet) {
+      if (isInternet) {
+        showLoading();
+        odoo.loadMenus().then((OdooResponse res) {
+          var _menus = res.getRecords();
+          print(_menus);
+          if (!res.hasError()) {
+            setState(() {
+              hideLoading();
+            });
+            print(res.toString());
+          } else {
+            print(res.toString());
+            print(res.getError());
+            showMessage("Warning", res.getErrorMessage());
+          }
+
+        });
+      }
+    });
+  }
+
 
   _getPartners() async {
     isConnected().then((isInternet) {
       if (isInternet) {
         showLoading();
         odoo.searchRead(Strings.res_partner, [], ['email', 'name', 'phone']).then(
-              (OdooResponse res) {
+          (OdooResponse res) {
             if (!res.hasError()) {
               setState(() {
                 hideLoading();
@@ -33,14 +58,14 @@ class _HomeState extends Base<Home> {
                   _partners.add(
                     new Partner(
                       id: i["id"],
-                      email: i["email"] is! bool ? i["email"] : "N/A",
+                      email: i["email"] is!bool ? i["email"] : "N/A",
                       name: i["name"],
-                      phone: i["phone"] is! bool ? i["phone"] : "N/A",
+                      phone: i["phone"] is!bool ? i["phone"] : "N/A",
                       imageUrl: getURL() +
-                          "/web/image?model=res.partner&field=image&" +
-                          session +
-                          "&id=" +
-                          i["id"].toString(),
+                      "/web/image?model=res.partner&field=image&" +
+                      session +
+                      "&id=" +
+                      i["id"].toString(),
                     ),
                   );
                 }
@@ -61,6 +86,7 @@ class _HomeState extends Base<Home> {
 
     getOdooInstance().then((odoo) {
       _getPartners();
+      _getMenus();
     });
   }
 
@@ -72,7 +98,7 @@ class _HomeState extends Base<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: < Widget > [
             Icon(
               Icons.person_outline,
               color: Colors.grey.shade300,
@@ -97,7 +123,7 @@ class _HomeState extends Base<Home> {
       key: scaffoldKey,
       appBar: AppBar(
         title: Text("Home"),
-        actions: <Widget>[
+        actions: < Widget > [
           IconButton(
             icon: Icon(
               Icons.settings,
@@ -118,47 +144,47 @@ class _HomeState extends Base<Home> {
           ),
         ],
       ),
-      body: _partners.length > 0
-          ? ListView.builder(
-              itemCount: _partners.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, i) => InkWell(
-                onTap: () {
-                  push(PartnerDetails(data: _partners[i]));
-                },
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                      height: 10.0,
-                    ),
-                    ListTile(
-                      leading: CircleAvatar(
-                        foregroundColor: Theme.of(context).primaryColor,
-                        backgroundColor: Colors.grey,
-                        backgroundImage: NetworkImage(_partners[i].imageUrl),
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            _partners[i].name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      subtitle: Container(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Text(
-                          _partners[i].email,
-                          style: TextStyle(color: Colors.grey, fontSize: 15.0),
-                        ),
-                      ),
-                    )
-                  ],
+      body: _partners.length > 0 ?
+      ListView.builder(
+        itemCount: _partners.length,
+        physics: const AlwaysScrollableScrollPhysics(),
+          itemBuilder: (context, i) => InkWell(
+            onTap: () {
+              push(PartnerDetails(data: _partners[i]));
+            },
+            child: Column(
+              children: < Widget > [
+                Divider(
+                  height: 10.0,
                 ),
-              ),
-            )
-          : emptyView,
+                ListTile(
+                  leading: CircleAvatar(
+                    foregroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: NetworkImage(_partners[i].imageUrl),
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: < Widget > [
+                      Text(
+                        _partners[i].name,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  subtitle: Container(
+                    padding: const EdgeInsets.only(top: 5.0),
+                      child: Text(
+                        _partners[i].email,
+                        style: TextStyle(color: Colors.grey, fontSize: 15.0),
+                      ),
+                  ),
+                )
+              ],
+            ),
+          ),
+      ) :
+      emptyView,
     );
   }
 }

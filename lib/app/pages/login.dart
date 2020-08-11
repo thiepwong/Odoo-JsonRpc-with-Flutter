@@ -28,8 +28,8 @@ class _LoginState extends Base<Login> {
   bool isCorrectURL = false;
   bool isDBFilter = false;
   TextEditingController _urlCtrler = new TextEditingController();
-  TextEditingController _emailCtrler = new TextEditingController();
-  TextEditingController _passCtrler = new TextEditingController();
+  TextEditingController _emailCtrler = new TextEditingController(text: 'thiep.wong@gmail.com');
+  TextEditingController _passCtrler = new TextEditingController(text: 'taoday');
 
   _checkFirstTime() {
     if (getURL() != null) {
@@ -46,6 +46,7 @@ class _LoginState extends Base<Login> {
           odoo.authenticate(_email, _pass, _selectedDb).then(
             (http.Response auth) {
               if (auth.body != null) {
+                print(auth.body);
                 User user = User.fromJson(jsonDecode(auth.body));
                 if (user != null && user.result != null) {
                   print(auth.body.toString());
@@ -82,7 +83,7 @@ class _LoginState extends Base<Login> {
               dynamicList = json.decode(res.body)['result'] as List;
               saveOdooUrl(odooURL);
               dynamicList.forEach((db) => _dbList.add(db));
-              _selectedDb = _dbList[0];
+              _selectedDb = "bms_beta";//  _dbList[0];
               if (_dbList.length == 1) {
                 isDBFilter = true;
               } else {

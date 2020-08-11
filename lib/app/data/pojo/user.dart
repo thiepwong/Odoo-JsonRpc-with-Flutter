@@ -1,9 +1,13 @@
+import 'dart:core';
+ 
 class User {
   Result result;
 
   User({this.result});
 
   User.fromJson(Map<String, dynamic> json) {
+    print('\r\n Thiep ===> ');
+    print(json);
     result =
         json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
@@ -29,7 +33,7 @@ class Result {
   String partnerDisplayName;
   int companyId;
   int partnerId;
-  bool userCompanies;
+  UserCompanies userCompanies;
   String webBaseUrl;
   bool odoobotInitialized;
 
@@ -51,7 +55,9 @@ class Result {
   });
 
   Result.fromJson(Map<String, dynamic> json) {
-    sessionId = json['session_id'];
+    print('\r\n ====> ===> \r\n');
+    print(json);
+    // sessionId = '3434534534534534'; // json['session_id'];
     uid = json['uid'];
     isAdmin = json['is_admin'];
     userContext = json['user_context'] != null
@@ -67,7 +73,7 @@ class Result {
         : "N/A";
     companyId = json['company_id'];
     partnerId = json['partner_id'];
-    userCompanies = json['user_companies'];
+    // userCompanies = new UserCompanies.fromJson(json['user_companies']);
     webBaseUrl = json['web.base.url'] is! bool ? json['web.base.url'] : "N/A";
     odoobotInitialized = json['odoobot_initialized'];
   }
@@ -87,7 +93,7 @@ class Result {
     data['partner_display_name'] = this.partnerDisplayName;
     data['company_id'] = this.companyId;
     data['partner_id'] = this.partnerId;
-    data['user_companies'] = this.userCompanies;
+    // data['user_companies'] =   this.userCompanies;
     data['web.base.url'] = this.webBaseUrl;
     data['odoobot_initialized'] = this.odoobotInitialized;
     return data;
@@ -114,4 +120,20 @@ class UserContext {
     data['uid'] = this.uid;
     return data;
   }
+}
+
+class UserCompanies{
+
+  List<Map<String,dynamic>>  currentCompany;
+  List<Map<String,dynamic>> allowedCompany;
+
+  UserCompanies({this.currentCompany,this.allowedCompany});
+
+  UserCompanies.fromJson(Map<String, dynamic> json) {
+    currentCompany = json['current_companies'];
+    allowedCompany = json['allowed_companies'];
+
+  }
+      
+  
 }

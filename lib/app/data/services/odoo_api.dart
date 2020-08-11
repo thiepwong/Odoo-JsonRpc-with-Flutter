@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:convert'; 
 import 'package:http/http.dart' as http;
 import 'package:odoo_client/app/utility/constant.dart';
 import 'package:uuid/uuid.dart';
@@ -23,8 +23,8 @@ class Odoo {
     return _serverURL + path;
   }
 
-  setSessionId(String session_id) {
-    _sessionId = session_id;
+  setSessionId(String sessionId) {
+    _sessionId = sessionId;
   }
 
   initOdoo() async {
@@ -64,10 +64,14 @@ class Odoo {
     return response;
   }
 
+  Future<OdooResponse> loadMenus() async {
+    return await callKW('ir.html.menu','load_menus',[''], kwargs:Null,context:getContext());
+
+  }
+
   Future<OdooResponse> read(String model, List<int> ids, List<String> fields,
       {dynamic kwargs, Map context}) async {
-    return await callKW(model, "read", [ids, fields],
-        kwargs: kwargs, context: context);
+    return await callKW(model, "read", [ids, fields],kwargs: kwargs, context: context);
   }
 
   Future<OdooResponse> searchRead(
@@ -190,6 +194,7 @@ class Odoo {
     _headers["Cookie"] = prefs.getString("session");
     print("------------------------------------------->>>");
     print("REQUEST: ${url}");
+    print("Coookieee: ${_headers["Cookie"]}");
     print("------------------------------------------->>>");
     final response = await _client.post(url, body: body, headers: _headers);
     _updateCookies(response);
@@ -243,3 +248,5 @@ class Odoo {
     return res;
   }
 }
+
+
