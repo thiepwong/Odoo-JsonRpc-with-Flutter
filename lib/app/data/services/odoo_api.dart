@@ -65,7 +65,7 @@ class Odoo {
   }
 
   Future<OdooResponse> loadMenus() async {
-    return await callKW('ir.html.menu','load_menus',[''], kwargs:Null,context:getContext());
+    return await callKW('ir.ui.menu','load_menus', [{}],kwargs:{}, context: getContext() );
 
   }
 
@@ -175,12 +175,14 @@ class Odoo {
   }
 
   Map createPayload(Map params) {
-    return {
+    var apiUrl =  {
       "id": new Uuid().v1(),
       "jsonrpc": "2.0",
       "method": "call",
       "params": params,
     };
+    print(apiUrl.toString());
+    return apiUrl;
   }
 
   Map getContext() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:odoo_client/app/data/pojo/menus.dart';
 import 'package:odoo_client/app/data/pojo/partners.dart';
 import 'package:odoo_client/app/data/services/odoo_api.dart';
 import 'package:odoo_client/app/data/services/odoo_response.dart';
@@ -14,29 +15,44 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends Base < Home > {
-  //Odoo _odoo;
+class _HomeState extends Base < Home > { 
   List < Partner > _partners = [];
+  List <MainMenu> _mainMenus = [];
 
   _getMenus() async {
     isConnected().then(
       (isInternet) {
       if (isInternet) {
         showLoading();
-        odoo.loadMenus().then((OdooResponse res) {
-          var _menus = res.getRecords();
-          print(_menus);
-          if (!res.hasError()) {
-            setState(() {
-              hideLoading();
-            });
-            print(res.toString());
-          } else {
-            print(res.toString());
-            print(res.getError());
-            showMessage("Warning", res.getErrorMessage());
-          }
-
+        odoo.loadMenus().then(
+          (OdooResponse res) {
+            if (!res.hasError()) {
+              setState(() {
+                hideLoading();
+                String session = getSession();
+                session = session.split(",")[0].split(";")[0];
+                for (var i in res.getMenuItems()) {
+                  _mainMenus.add(
+                    new MainMenu(
+                      id: BigInt.from(i["id"]),
+                      name: i['name'],
+                      action: i["action"] == false?null: i["action"],
+                      // children: List.of(i['children']) , 
+                      parentId: i['parent_id'] == false?null :i['parent_id'],
+                      sequence: i['sequence'],
+                      webIconData: i['web_icon_data'],
+                      webIcon: i['web_icon'],
+                      xmlId: i['xmlid'], 
+                    ),
+                  );
+                }
+              });
+            } else {
+              print(res.getError());
+              showMessage("Warning", res.getErrorMessage());
+            }
+          }, onError: (err){
+          print(err.partialResult);
         });
       }
     });
@@ -85,7 +101,7 @@ class _HomeState extends Base < Home > {
     super.initState();
 
     getOdooInstance().then((odoo) {
-      _getPartners();
+      // _getPartners();
       _getMenus();
     });
   }
@@ -122,7 +138,7 @@ class _HomeState extends Base < Home > {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("Wechange Building manager"),
         actions: < Widget > [
           IconButton(
             icon: Icon(
@@ -144,13 +160,53 @@ class _HomeState extends Base < Home > {
           ),
         ],
       ),
-      body: _partners.length > 0 ?
+      body: _mainMenus.length > 0 ?
+//       GridView.count(
+//   primary: false,
+//   padding: const EdgeInsets.all(20),
+//   crossAxisSpacing: 10,
+//   mainAxisSpacing: 10,
+//   crossAxisCount: 2,
+//   children: <Widget>[
+//     Container(
+//       padding: const EdgeInsets.all(8),
+//       child: const Text("He'd have you all unravel at the"),
+//       color: Colors.teal[100],
+//     ),
+//     Container(
+//       padding: const EdgeInsets.all(8),
+//       child: const Text('Heed not the rabble'),
+//       color: Colors.teal[200],
+//     ),
+//     Container(
+//       padding: const EdgeInsets.all(8),
+//       child: const Text('Sound of screams but the'),
+//       color: Colors.teal[300],
+//     ),
+//     Container(
+//       padding: const EdgeInsets.all(8),
+//       child: const Text('Who scream'),
+//       color: Colors.teal[400],
+//     ),
+//     Container(
+//       padding: const EdgeInsets.all(8),
+//       child: const Text('Revolution is coming...'),
+//       color: Colors.teal[500],
+//     ),
+//     Container(
+//       padding: const EdgeInsets.all(8),
+//       child: const Text('Revolution, they...'),
+//       color: Colors.teal[600],
+//     ),
+//   ],
+// ):
+
       ListView.builder(
-        itemCount: _partners.length,
+        itemCount: _mainMenus.length,
         physics: const AlwaysScrollableScrollPhysics(),
           itemBuilder: (context, i) => InkWell(
             onTap: () {
-              push(PartnerDetails(data: _partners[i]));
+              // push(PartnerDetails(data: _mainMenus[i]));
             },
             child: Column(
               children: < Widget > [
@@ -161,13 +217,13 @@ class _HomeState extends Base < Home > {
                   leading: CircleAvatar(
                     foregroundColor: Theme.of(context).primaryColor,
                     backgroundColor: Colors.grey,
-                    backgroundImage: NetworkImage(_partners[i].imageUrl),
+                    // backgroundImage: NetworkImage(_mainMenus[i].name),
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: < Widget > [
                       Text(
-                        _partners[i].name,
+                        _mainMenus[i].name,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -175,7 +231,8 @@ class _HomeState extends Base < Home > {
                   subtitle: Container(
                     padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
-                        _partners[i].email,
+                        // _mainMenus[i].id.toString(),
+                         _mainMenus[i].name,
                         style: TextStyle(color: Colors.grey, fontSize: 15.0),
                       ),
                   ),
@@ -184,6 +241,7 @@ class _HomeState extends Base < Home > {
             ),
           ),
       ) :
+      
       emptyView,
     );
   }
