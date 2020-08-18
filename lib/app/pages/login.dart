@@ -83,7 +83,7 @@ class _LoginState extends Base<Login> {
               dynamicList = json.decode(res.body)['result'] as List;
               saveOdooUrl(odooURL);
               dynamicList.forEach((db) => _dbList.add(db));
-              _selectedDb = "bms_beta";//  _dbList[0];
+              _selectedDb = "icid";//  _dbList[0];
               if (_dbList.length == 1) {
                 isDBFilter = true;
               } else {
