@@ -6,6 +6,7 @@ import 'package:odoo_client/app/data/services/odoo_response.dart';
 import 'package:odoo_client/app/data/services/utils.dart';
 import 'package:odoo_client/app/pages/home.dart';
 import 'package:odoo_client/app/pages/settings.dart';
+import 'package:odoo_client/app/utility/constant.dart';
 import 'package:odoo_client/app/utility/strings.dart';
 import 'package:odoo_client/base.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,6 +70,13 @@ class _LoginState extends Base<Login> {
     }
   }
 
+_clearCache()  async{
+    odoo.destroy();
+    preferences.remove(Constants.USER_PREF);
+    preferences.remove(Constants.SESSION);
+    preferences.remove(Constants.ODOO_URL);
+    pushAndRemoveUntil(Login());
+}
   _checkURL() {
     isConnected().then((isInternet) {
       if (isInternet) {
@@ -83,7 +91,7 @@ class _LoginState extends Base<Login> {
               dynamicList = json.decode(res.body)['result'] as List;
               saveOdooUrl(odooURL);
               dynamicList.forEach((db) => _dbList.add(db));
-              _selectedDb = "icid";//  _dbList[0];
+              _selectedDb =   _dbList[0];
               if (_dbList.length == 1) {
                 isDBFilter = true;
               } else {
@@ -286,6 +294,32 @@ class _LoginState extends Base<Login> {
       ),
     );
 
+    final clearCache = Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        onPressed: () {
+          _clearCache();
+        },
+        padding: EdgeInsets.all(12),
+        color: Colors.indigo.shade400,
+        child: Text(
+          'Clear Cache',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Montserrat",
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+
+
+
     final checkURLWidget = Container(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -310,7 +344,8 @@ class _LoginState extends Base<Login> {
           SizedBox(height: 8.0),
           password,
           SizedBox(height: 24.0),
-          loginButton
+          loginButton,
+          clearCache,
         ],
       ),
     );
