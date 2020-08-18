@@ -59,6 +59,7 @@ class _ProfilePageState extends Base<ProfilePage> {
     odoo.destroy();
     preferences.remove(Constants.USER_PREF);
     preferences.remove(Constants.SESSION);
+    preferences.remove(Constants.ODOO_URL);
     pushAndRemoveUntil(Login());
   }
 
