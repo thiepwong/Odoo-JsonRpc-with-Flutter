@@ -78,11 +78,11 @@ class _HomeState extends Base<Home> {
               }
             });
           } else {
-            print(res.getError());
+            // print(res.getError());
             showMessage("Warning", res.getErrorMessage());
           }
         }, onError: (err) {
-          print(err.partialResult);
+          // print(err.partialResult);
         });
       }
     });
@@ -117,7 +117,7 @@ class _HomeState extends Base<Home> {
                 }
               });
             } else {
-              print(res.getError());
+              // print(res.getError());
               showMessage("Warning", res.getErrorMessage());
             }
           },

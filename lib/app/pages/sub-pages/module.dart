@@ -104,15 +104,16 @@ class _ModulePageState extends State<ModulePage> {
       child: TreeView(
       parentList: [
             for (var m1 in _menu)  Parent(
-                parent: Text(m1.name), 
+                parent: ListTile(   title: Text(m1.name)), 
                 childList: ChildList(
                   children:[
-                    for (var m2 in m1.children)  m2.action!=null?Text(m2.name):Parent(
-                      parent: Text(m2.name),
+                    for (var m2 in m1.children)  m2.action!=null? ListTile( title: Padding(padding: EdgeInsets.only(left:30), child: Text(m2.name) ) ):Parent(
+                      parent:ListTile( title: Padding(padding: EdgeInsets.only(left:30), child: Text(m2.name) ) ),
                       childList: ChildList(
                         children:[
-                          for (var m3 in m2.children) m3.action!=null?Text(m3.name):Parent(
-                            parent: Text(m3.name)
+                          for (var m3 in m2.children) m3.action!=null? ListTile( title: Padding(padding: EdgeInsets.only(left:60), child: Text(m3.name) ) ):Parent(
+                            parent: ListTile( title: Padding(padding: EdgeInsets.only(left:60), child: Text(m3.name) ) ),
+                            childList: ChildList(children: [],),
                           )
                         ]
                       )
