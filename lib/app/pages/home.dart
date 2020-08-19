@@ -2,19 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:odoo_client/app/data/pojo/menus.dart';
-import 'package:odoo_client/app/data/pojo/partners.dart';
-import 'package:odoo_client/app/data/services/odoo_api.dart';
+import 'package:odoo_client/app/data/pojo/partners.dart'; 
 import 'package:odoo_client/app/data/services/odoo_response.dart';
-import 'package:odoo_client/app/pages/partner_details.dart';
-import 'package:odoo_client/app/pages/sub-pages/customer.dart';
+import 'package:odoo_client/app/pages/sub-pages/module.dart';  
 import 'package:odoo_client/app/utility/strings.dart';
 import 'package:odoo_client/base.dart';
 
-import '../data/pojo/menus.dart';
-import '../data/pojo/menus.dart';
-import '../data/pojo/menus.dart';
+import '../data/pojo/menus.dart'; 
 import 'profile.dart';
 import 'settings.dart';
+import 'sub-pages/app_module.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -193,20 +190,21 @@ class _HomeState extends Base<Home> {
           ),
         ],
       ),
+      
       body: _mainMenus.length > 0
           ? GridView.builder(
               itemCount: _mainMenus.length,
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:3),
               physics: const AlwaysScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return new InkWell(
                     customBorder: CircleBorder(),
                     onTap: () {
-                      push(CustomerList(
+                      push(ModulePage(
                         menu: _mainMenus[index].children,
-                        data: null,
+                        data: _mainMenus[index],
                       ));
                     },
                     child: new Card(

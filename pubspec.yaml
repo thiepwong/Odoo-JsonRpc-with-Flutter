@@ -15,6 +15,7 @@ dependencies:
   shared_preferences: ^0.5.6
   flutter_easyloading: ^1.0.1
   sprintf: ^4.0.2
+  tree_view: ^0.0.5
 
 dev_dependencies:
   flutter_test:
