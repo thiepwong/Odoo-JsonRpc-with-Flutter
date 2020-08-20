@@ -26,12 +26,39 @@ class _ModulePageState extends State<ModulePage> {
     this._menu = widget.menu;
   }
 
+
+  static void _showDialog(context, m) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text(m.action),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+ 
   @override
   Widget build(BuildContext context) {
     Row toolbar = new Row(
+    
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
+      children: <Widget>[  
+        // ListTile()
         IconButton(
           alignment: Alignment.centerLeft,
           onPressed: () => Navigator.pop(context),
@@ -61,68 +88,16 @@ class _ModulePageState extends State<ModulePage> {
         automaticallyImplyLeading: false,
         title: toolbar,
       ),
-      drawer: Drawer(
-      //   child: ListView.builder(
-      //   itemCount: _menu.length,
-      //   physics: const AlwaysScrollableScrollPhysics(),
-      //   itemBuilder: (context, i) => InkWell(
-      //     onTap: () {
-      //       // push(PartnerDetails(data: _mainMenus[i]));
-      //     },
-      //     child: Column(
-      //       children: <Widget>[
-      //         Divider(
-      //           height: 10.0,
-      //         ),
-      //         ListTile(
-      //           leading: CircleAvatar(
-      //             foregroundColor: Theme.of(context).primaryColor,
-      //             backgroundColor: Colors.grey,
-      //             // backgroundImage: NetworkImage(_mainMenus[i].name),
-      //           ),
-      //           title: Row(
-      //             mainAxisAlignment: MainAxisAlignment.start,
-      //             children: <Widget>[
-      //               Text(
-      //                 _menu[i].name,
-      //                 style: TextStyle(fontWeight: FontWeight.bold),
-      //               ),
-      //             ],
-      //           ),
-      //           subtitle: Container(
-      //               padding: const EdgeInsets.only(top: 5.0),
-      //               child: Column(
-      //                 children: [
-      //                   for (var _m in _menu[i].children) Text(_m.name)
-      //                 ],
-      //               )),
-      //         )
-      //       ],
-      //     ),
-      //   ),
-      // )),
-      child: TreeView(
-      parentList: [
-            for (var m1 in _menu)  Parent(
-                parent: ListTile(   title: Text(m1.name)), 
-                childList: ChildList(
-                  children:[
-                    for (var m2 in m1.children)  m2.action!=null? ListTile( title: Padding(padding: EdgeInsets.only(left:30), child: Text(m2.name) ) ):Parent(
-                      parent:ListTile( title: Padding(padding: EdgeInsets.only(left:30), child: Text(m2.name) ) ),
-                      childList: ChildList(
-                        children:[
-                          for (var m3 in m2.children) m3.action!=null? ListTile( title: Padding(padding: EdgeInsets.only(left:60), child: Text(m3.name) ) ):Parent(
-                            parent: ListTile( title: Padding(padding: EdgeInsets.only(left:60), child: Text(m3.name) ) ),
-                            childList: ChildList(children: [],),
-                          )
-                        ]
-                      )
-                    )
-                  ]
-                )  
-                )  
+      drawer: Drawer( 
+
+        child: SafeArea(
+          // margin: EdgeInsets.only(top:10.0),
+          child:Column(
+            children: [
+              Expanded(child: Center(child: Text(_data.name,style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),)), flex: 1, ) ,
+              Expanded(child: _menuTreeView(_menu,context), flex:9)
             ],
-          )
+          )  ,)
       ),
       body: Container(
         child: Center(
@@ -132,31 +107,120 @@ class _ModulePageState extends State<ModulePage> {
     );
   }
 
-  // var _menuTreeView = (menu)=>  
-  //  TreeView(
-  //   parentList: [
-  //   for (var m1 in menu) Container(child: Parent(
-  //       parent: Text(m1.name), 
-  //       childList: ChildList(
-  //         children:[
-  //           for (var m2 in m1.children)  m2.action!=null?Text(m2.name):Parent(
-  //             parent: Text(m2.name),
-  //             childList: ChildList(
-  //               children:[
-  //                 for (var m3 in m2.children) m3.action!=null?Text(m3.name):Parent(
-  //                   parent: Text(m3.name)
-  //                 )
-  //               ]
-  //             )
-  //           )
-  //         ]
-  //       ) 
+  var _menuTreeView = (_menu,context) =>TreeView(
+      parentList: [
+            for (var m1 in _menu)  Parent(
+                parent: Container(  
+                  decoration: BoxDecoration(
+                    border: Border( 
+                      bottom: BorderSide(width: 0.65, color: Colors.black38),
+                    )  
+                    ),
+                  padding: const EdgeInsets.only(left:10.0), 
+                  height: 30.0,
+                  child: Row( 
+                      textBaseline: TextBaseline.alphabetic,
+                    mainAxisAlignment: MainAxisAlignment.center, 
+                    crossAxisAlignment:CrossAxisAlignment.center,
+                    children:[ 
+                        Expanded(child: Align(alignment: Alignment.centerLeft, child:  m1.children.length >0?Text(m1.name):
+                        TextButton(
+                          onPressed: ()=> _showDialog(context,m1) , 
+                        child: Text(m1.name), 
+                        
+                        ) ), flex:9 ),
+                        m1.children.length >0? Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1):Container()
+                  ])), 
+                  childList: m1.children !=null?ChildList(
+                    children:[
+                      for (var m2 in m1.children)  m2.action!=null? Container(  
+                                        decoration: BoxDecoration(
+                                          border: Border( 
+                                            bottom: BorderSide(width: 0.65, color: Colors.grey),
+                                          )  
+                                          ),
+                                        padding: const EdgeInsets.only(left:30.0), 
+                                        height: 30.0,
+                                        child: Row( 
+                                            textBaseline: TextBaseline.alphabetic,
+                                          mainAxisAlignment: MainAxisAlignment.center, 
+                                          crossAxisAlignment:CrossAxisAlignment.center,
+                                          children:[ 
+                                              Expanded(child: Align(alignment: Alignment.centerLeft, child:   TextButton(
+                                                onPressed: ()=> _showDialog(context,m2) , 
+                                              child: Text(m2.name), 
+                                              
+                                              )), flex:10 ),
+                                              // Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1)
+                                        ])):
+                                        Parent(
+                        parent:  Container(  
+                                        decoration: BoxDecoration(
+                                          border: Border( 
+                                            bottom: BorderSide(width: 0.65, color: Colors.grey),
+                                          )  
+                                          ),
+                                        padding: const EdgeInsets.only(left:30.0), 
+                                        height: 30.0,
+                                        child: Row( 
+                                            textBaseline: TextBaseline.alphabetic,
+                                          mainAxisAlignment: MainAxisAlignment.center, 
+                                          crossAxisAlignment:CrossAxisAlignment.center,
+                                          children:[ 
+                                              Expanded(child: Align(alignment: Alignment.centerLeft, child: Text(m2.name)), flex:9 ),
+                                              Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1)
+                                        ])),
+                        childList: ChildList(
+                          children:[
+                            for (var m3 in m2.children) m3.action!=null? 
+                                 Container(  
+                                        decoration: BoxDecoration(
+                                          border: Border( 
+                                            bottom: BorderSide(width: 0.35, color: Colors.grey),
+                                          )  
+                                          ),
+                                        padding: const EdgeInsets.only(left:50.0), 
+                                        height: 30.0,
+                                        child: Row( 
+                                            textBaseline: TextBaseline.alphabetic,
+                                          mainAxisAlignment: MainAxisAlignment.center, 
+                                          crossAxisAlignment:CrossAxisAlignment.center,
+                                          children:[ 
+                                              Expanded(child: Align(alignment: Alignment.centerLeft, child:   TextButton(
+                                                onPressed: ()=> _showDialog(context,m3) , 
+                                              child: Text(m3.name), 
+                                              
+                                              )), flex:10 ),
 
-
-  //       ) 
-  //   )
-  //   ],
-  // );
+                                              // Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1)
+                                        ])):
+                                        Parent(
+                              parent:  Container(  
+                                        decoration: BoxDecoration(
+                                          border: Border( 
+                                            bottom: BorderSide(width: 0.35, color: Colors.grey),
+                                          )  
+                                          ),
+                                        padding: const EdgeInsets.only(left:50.0), 
+                                        height: 30.0,
+                                        child: Row( 
+                                            textBaseline: TextBaseline.alphabetic,
+                                          mainAxisAlignment: MainAxisAlignment.center, 
+                                          crossAxisAlignment:CrossAxisAlignment.center,
+                                          children:[ 
+                                              Expanded(child: Align(alignment: Alignment.centerLeft, child: Text(m3.name)), flex:9 ),
+                                              Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1)
+                                        ])),
+                              childList: ChildList(children: [],),
+                            )
+                          ]
+                        )
+                      )
+                    ]
+                  ): null  
+              )  
+            ],
+          ); 
   
 
 }
