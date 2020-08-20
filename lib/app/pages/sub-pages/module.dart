@@ -116,19 +116,18 @@ class _ModulePageState extends State<ModulePage> {
                       bottom: BorderSide(width: 0.65, color: Colors.black38),
                     )  
                     ),
-                  padding: const EdgeInsets.only(left:10.0), 
-                  height: 30.0,
+                  // padding: const EdgeInsets.only(left:15.0, top: 8, bottom: 8), 
+                  height:45.0,
                   child: Row( 
                       textBaseline: TextBaseline.alphabetic,
                     mainAxisAlignment: MainAxisAlignment.center, 
                     crossAxisAlignment:CrossAxisAlignment.center,
                     children:[ 
-                        Expanded(child: Align(alignment: Alignment.centerLeft, child:  m1.children.length >0?Text(m1.name):
-                        TextButton(
-                          onPressed: ()=> _showDialog(context,m1) , 
-                        child: Text(m1.name), 
-                        
-                        ) ), flex:9 ),
+                        Expanded(child: Align(alignment: Alignment.centerLeft, child:  m1.children.length >0?Padding(padding: EdgeInsets.only(left:15, top: 8, bottom: 8, right: 8) ,child: Text(m1.name)):
+                        InkWell(
+                          onTap: ()=> _showDialog(context,m1) , 
+                          child:  Row(children:[ Padding(padding: EdgeInsets.only(left:15, top: 8, bottom: 8, right: 8) ,child: Text(m1.name))] ),  
+                        ) ), flex:10 ),
                         m1.children.length >0? Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1):Container()
                   ])), 
                   childList: m1.children !=null?ChildList(
@@ -139,18 +138,17 @@ class _ModulePageState extends State<ModulePage> {
                                             bottom: BorderSide(width: 0.65, color: Colors.grey),
                                           )  
                                           ),
-                                        padding: const EdgeInsets.only(left:30.0), 
-                                        height: 30.0,
+                                        // padding: const EdgeInsets.only(left:35.0), 
+                                        height: 45.0,
                                         child: Row( 
                                             textBaseline: TextBaseline.alphabetic,
                                           mainAxisAlignment: MainAxisAlignment.center, 
                                           crossAxisAlignment:CrossAxisAlignment.center,
                                           children:[ 
-                                              Expanded(child: Align(alignment: Alignment.centerLeft, child:   TextButton(
-                                                onPressed: ()=> _showDialog(context,m2) , 
-                                              child: Text(m2.name), 
-                                              
-                                              )), flex:10 ),
+                                              Expanded(child: Align(alignment: Alignment.centerLeft, child:  InkWell(
+                                                onTap: ()=> _showDialog(context,m2) , 
+                                                child:  Row(children:[ Padding(padding: EdgeInsets.only(left: 35, top: 8,bottom: 8,right: 8) ,child: Text(m2.name))] ),  
+                                              ) ), flex:10 ),
                                               // Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1)
                                         ])):
                                         Parent(
@@ -160,8 +158,8 @@ class _ModulePageState extends State<ModulePage> {
                                             bottom: BorderSide(width: 0.65, color: Colors.grey),
                                           )  
                                           ),
-                                        padding: const EdgeInsets.only(left:30.0), 
-                                        height: 30.0,
+                                        padding: const EdgeInsets.only(left:35.0), 
+                                        height: 45.0,
                                         child: Row( 
                                             textBaseline: TextBaseline.alphabetic,
                                           mainAxisAlignment: MainAxisAlignment.center, 
@@ -179,18 +177,17 @@ class _ModulePageState extends State<ModulePage> {
                                             bottom: BorderSide(width: 0.35, color: Colors.grey),
                                           )  
                                           ),
-                                        padding: const EdgeInsets.only(left:50.0), 
-                                        height: 30.0,
+                                        // padding: const EdgeInsets.only(left:55.0), 
+                                        height: 45.0,
                                         child: Row( 
                                             textBaseline: TextBaseline.alphabetic,
                                           mainAxisAlignment: MainAxisAlignment.center, 
                                           crossAxisAlignment:CrossAxisAlignment.center,
                                           children:[ 
-                                              Expanded(child: Align(alignment: Alignment.centerLeft, child:   TextButton(
-                                                onPressed: ()=> _showDialog(context,m3) , 
-                                              child: Text(m3.name), 
-                                              
-                                              )), flex:10 ),
+                                              Expanded(child: Align(alignment: Alignment.centerLeft, child:   InkWell(
+                                                onTap: ()=> _showDialog(context,m3) , 
+                                                child:  Row(children:[ Padding(padding: EdgeInsets.only(left: 55, top: 8,bottom: 8,right: 8) ,child: Text(m3.name))] ),  
+                                              ) ), flex:10 ),
 
                                               // Expanded(child: Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_drop_down, color: Colors.blueGrey, size: 18)), flex:1)
                                         ])):
@@ -201,8 +198,8 @@ class _ModulePageState extends State<ModulePage> {
                                             bottom: BorderSide(width: 0.35, color: Colors.grey),
                                           )  
                                           ),
-                                        padding: const EdgeInsets.only(left:50.0), 
-                                        height: 30.0,
+                                        padding: const EdgeInsets.only(left:55.0), 
+                                        height: 45.0,
                                         child: Row( 
                                             textBaseline: TextBaseline.alphabetic,
                                           mainAxisAlignment: MainAxisAlignment.center, 

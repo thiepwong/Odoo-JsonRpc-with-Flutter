@@ -194,7 +194,7 @@ class _HomeState extends Base<Home> {
       body: _mainMenus.length > 0
           ? GridView.builder(
               itemCount: _mainMenus.length,
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(5),
               gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:3),
               physics: const AlwaysScrollableScrollPhysics(),
@@ -211,21 +211,23 @@ class _HomeState extends Base<Home> {
                       color: Colors.transparent,
                       shadowColor: Colors.transparent,
                       borderOnForeground: false,
-                      margin: EdgeInsets.all(15),
-                      child: Stack(
+                      margin: EdgeInsets.all(10),
+                      child: Column(
                         children: [
-                          Center(
+                        Expanded(
+                          flex: 7,
+                          child: Center(
                               child: Image.memory(
                             base64.decode(
                                 _mainMenus[index].webIconData.split(',').last),
                             height: 65,
-                          )),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child:
-                                Center(child: new Text(_mainMenus[index].name)),
+                          )
+                          ),
+                        ),
+                         
+                          Expanded(
+                            flex:3,
+                            child:   Center(child: new Text(_mainMenus[index].name, style: TextStyle(fontSize: 16),)),
                           )
                         ],
                       ),

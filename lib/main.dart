@@ -42,8 +42,9 @@ class _AppState extends Base<App> {
             debugShowCheckedModeBanner: false,
             title: Strings.app_title,
             theme: ThemeData(
-              primarySwatch: Colors.indigo,
+              primarySwatch: Colors.orange,
               fontFamily: "Montserrat",
+              textTheme: TextTheme(bodyText2: TextStyle(fontSize: 20))
             ),
             home: FutureBuilder<Odoo>(
               future: getOdooInstance(),
